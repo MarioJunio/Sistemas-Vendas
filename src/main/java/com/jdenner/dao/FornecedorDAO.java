@@ -3,6 +3,7 @@ package com.jdenner.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.jdenner.dao.db.Conexao;
 import com.jdenner.model.Fornecedor;
 
 import javafx.collections.FXCollections;

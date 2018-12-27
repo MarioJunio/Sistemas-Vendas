@@ -64,6 +64,7 @@ public class Produto {
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMinimumFractionDigits(2);
         nf.setMaximumFractionDigits(2);
+        
         return nf.format(precoVenda);
     }
 

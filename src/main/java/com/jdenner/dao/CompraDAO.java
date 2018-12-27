@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import com.jdenner.dao.db.Conexao;
 import com.jdenner.model.Compra;
 import com.jdenner.model.Compra.ItemCompra;
 import com.jdenner.model.Situacao;

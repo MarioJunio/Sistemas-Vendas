@@ -1,5 +1,6 @@
 package com.jdenner.dao;
 
+import com.jdenner.dao.db.Conexao;
 import com.jdenner.model.Cliente;
 import java.sql.Date;
 import java.sql.PreparedStatement;

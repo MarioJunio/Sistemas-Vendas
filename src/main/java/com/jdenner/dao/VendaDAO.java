@@ -1,5 +1,6 @@
 package com.jdenner.dao;
 
+import com.jdenner.dao.db.Conexao;
 import com.jdenner.model.Situacao;
 import com.jdenner.model.Venda;
 import java.sql.Date;

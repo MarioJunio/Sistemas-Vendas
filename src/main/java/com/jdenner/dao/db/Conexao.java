@@ -1,4 +1,4 @@
-package com.jdenner.dao;
+package com.jdenner.dao.db;
 
 import java.sql.*;
 
@@ -9,7 +9,7 @@ public class Conexao {
     private final String BANCO_DE_DADOS = "dbsistemavenda";
     private final String USUARIO = "root";
     private final String SENHA = "bitlyuf";
-    private final String URL = "jdbc:mysql://" + SERVIDOR + ":" + PORTA + "/" + BANCO_DE_DADOS;
+    private final String URL = "jdbc:mysql://" + SERVIDOR + ":" + PORTA + "/" + BANCO_DE_DADOS + "?autoReconnect=true&useSSL=false";
 
     private Connection conexao;
 
