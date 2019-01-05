@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import com.jdenner.dao.ProdutoDAO;
 import com.jdenner.model.Produto;
+import com.jdenner.model.Unidade;
 import com.jdenner.view.component.BotaoEditar;
 import com.jdenner.view.component.BotaoExcluir;
 
@@ -13,187 +14,252 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 public class ProdutoController implements Initializable, Controller {
 
-    private Produto produto;
+	private final int QUANTIDADE_PAGINA = 9;
 
-    @FXML
-    private Parent consulta;
+	private Produto produto;
 
-    @FXML
-    private TableView tabela;
+	@FXML
+	private Parent consulta;
 
-    @FXML
-    private TextField filtro;
+	@FXML
+	private TableView<Produto> tabela;
 
-    @FXML
-    private TableColumn colunaNome;
+	@FXML
+	private TextField filtro;
 
-    @FXML
-    private TableColumn colunaEditar;
+	@FXML
+	private TableColumn colunaNome;
 
-    @FXML
-    private TableColumn colunaExcluir;
+	@FXML
+	private TableColumn colunaEditar;
 
-    @FXML
-    private Pagination paginacao;
+	@FXML
+	private TableColumn colunaExcluir;
 
-    @FXML
-    private Parent formulario;
+	@FXML
+	private Pagination paginacao;
 
-    @FXML
-    private Label rotuloNome;
+	@FXML
+	private Parent formulario;
 
-    @FXML
-    private TextField campoNome;
+	@FXML
+	private Label rotuloNome;
 
-    @FXML
-    private Label rotuloPrecoCompra;
+	@FXML
+	private TextField campoNome;
 
-    @FXML
-    private TextField campoPrecoCompra;
+	@FXML
+	private Label rotuloMarca;
 
-    @FXML
-    private Label rotuloPrecoVenda;
+	@FXML
+	private TextField campoMarca;
 
-    @FXML
-    private TextField campoPrecoVenda;
+	@FXML
+	private Label rotuloPeso;
 
-    @FXML
-    private Button botaoSalvar;
+	@FXML
+	private TextField campoPeso;
 
-    @FXML
-    private Button botaoCancelar;
+	@FXML
+	private Label rotuloUnidade;
 
-    private final int QUANTIDADE_PAGINA = 9;
+	@FXML
+	private ComboBox<Unidade> comboUnidade;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+	@FXML
+	private Label rotuloQuantidade;
 
-        colunaNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colunaEditar.setCellFactory(new BotaoEditar(this));
-        colunaEditar.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        colunaExcluir.setCellFactory(new BotaoExcluir(this));
-        colunaExcluir.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        paginacao.setPageFactory(new Callback<Integer, Node>() {
+	@FXML
+	private TextField campoQuantidade;
 
-            @Override
-            public Node call(Integer pagina) {
-                atualizarGrade(pagina);
-                return tabela;
-            }
-        });
-        trocar(false);
-        atualizarGrade(0);
-    }
+	@FXML
+	private Label rotuloUnidadeQuantidade;
 
-    private void trocar(boolean form) {
-        formulario.setVisible(form);
-        consulta.setVisible(!form);
-    }
+	@FXML
+	private Label rotuloPrecoUnitario;
 
-    @FXML
-    private void novo() {
-        this.produto = new Produto();
-        campoNome.setText("");
-        campoPrecoCompra.setText("");
-        campoPrecoVenda.setText("");
-        trocar(true);
-    }
+	@FXML
+	private TextField campoPrecoUnitario;
 
-    @FXML
-    private void filtrar() {
-        atualizarGrade(0);
-    }
+	@FXML
+	private Label rotuloEstoque;
 
-    @Override
-    public void editar(int codigo) {
-        try {
-            this.produto = this.produto = ProdutoDAO.recuperar(codigo);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return;
-        }
-        campoNome.setText(produto.getNome());
-        campoPrecoCompra.setText(produto.getPrecoCompraFormatado());
-        campoPrecoVenda.setText(produto.getPrecoVendaFormatado());
-        trocar(true);
-    }
+	@FXML
+	private TextField campoEstoque;
 
-    @Override
-    public void excluir(int codigo) {
-        try {
-            this.produto = ProdutoDAO.recuperar(codigo);
-            ProdutoDAO.excluir(produto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-        atualizarGrade(0);
-    }
+	@FXML
+	private CheckBox checkUsarUnidadeConversao;
 
-    @FXML
-    private void salvar() {
-        rotuloNome.setTextFill(Paint.valueOf("#333333"));
-        rotuloPrecoCompra.setTextFill(Paint.valueOf("#333333"));
-        rotuloPrecoVenda.setTextFill(Paint.valueOf("#333333"));
+	@FXML
+	private HBox boxUnidadeConversao;
 
-        boolean erro = false;
+	@FXML
+	private Label rotuloUnidadeConversao1;
 
-        try {
-            produto.setNome(campoNome.getText().trim());
-        } catch (Exception e) {
-            rotuloNome.setTextFill(Paint.valueOf("red"));
-            erro = true;
-        }
-        try {
-            produto.setPrecoCompra(campoPrecoCompra.getText());
-        } catch (Exception e) {
-            rotuloPrecoCompra.setTextFill(Paint.valueOf("red"));
-            erro = true;
-        }
-        try {
-            produto.setPrecoVenda(campoPrecoVenda.getText());
-        } catch (Exception e) {
-            rotuloPrecoVenda.setTextFill(Paint.valueOf("red"));
-            erro = true;
-        }
+	@FXML
+	private ComboBox comboUnidadeConversao1;
 
-        if (erro) {
-            return;
-        }
+	@FXML
+	private Label rotuloUnidadeEquivalente1;
 
-        try {
-            ProdutoDAO.salvar(produto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@FXML
+	private TextField campoQuantidadeUnidadeEquivalente1;
 
-        trocar(false);
-        atualizarGrade(0);
-    }
+	@FXML
+	private ComboBox comboUnidadeEquivalente1;
 
-    @FXML
-    private void cancelar() {
-        trocar(false);
-        atualizarGrade(0);
-    }
+	@FXML
+	private Button botaoSalvar;
 
-    private void atualizarGrade(int pagina) {
-        try {
-            paginacao.setPageCount((int) Math.ceil(((double) ProdutoDAO.quantidade(filtro.getText())) / QUANTIDADE_PAGINA));
-            tabela.setItems(ProdutoDAO.listar(filtro.getText(), QUANTIDADE_PAGINA, pagina));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+	@FXML
+	private Button botaoCancelar;
+
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+
+		colunaNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		colunaEditar.setCellFactory(new BotaoEditar(this));
+		colunaEditar.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+		colunaExcluir.setCellFactory(new BotaoExcluir(this));
+		colunaExcluir.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+		paginacao.setPageFactory(new Callback<Integer, Node>() {
+
+			@Override
+			public Node call(Integer pagina) {
+				atualizarGrade(pagina);
+				return tabela;
+			}
+		});
+
+		trocar(false);
+		atualizarGrade(0);
+	}
+
+	private void trocar(boolean form) {
+		formulario.setVisible(form);
+		consulta.setVisible(!form);
+	}
+
+	@FXML
+	private void novo() {
+		this.produto = new Produto();
+
+		campoNome.clear();
+		campoNome.clear();
+		campoMarca.clear();
+		campoPeso.clear();
+		comboUnidade.getSelectionModel().clearSelection();
+		campoQuantidade.clear();
+		campoPrecoUnitario.clear();
+		campoEstoque.clear();
+		checkUsarUnidadeConversao.setSelected(Boolean.FALSE);
+		boxUnidadeConversao.setVisible(checkUsarUnidadeConversao.isSelected());
+
+		trocar(true);
+	}
+
+	@FXML
+	private void filtrar() {
+		atualizarGrade(0);
+	}
+
+	@Override
+	public void editar(int codigo) {
+
+		try {
+			this.produto = ProdutoDAO.recuperar(codigo);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
+
+		campoNome.setText(produto.getNome());
+
+		// TODO: preencher os demais campos com o produto a ser editado
+
+		trocar(true);
+	}
+
+	@Override
+	public void excluir(int codigo) {
+		try {
+			this.produto = ProdutoDAO.recuperar(codigo);
+			ProdutoDAO.excluir(produto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		atualizarGrade(0);
+	}
+
+	@FXML
+	private void salvar() {
+		rotuloNome.setTextFill(Paint.valueOf("#333333"));
+		rotuloPrecoCompra.setTextFill(Paint.valueOf("#333333"));
+		rotuloPrecoVenda.setTextFill(Paint.valueOf("#333333"));
+
+		boolean erro = false;
+
+		try {
+			produto.setNome(campoNome.getText().trim());
+		} catch (Exception e) {
+			rotuloNome.setTextFill(Paint.valueOf("red"));
+			erro = true;
+		}
+		try {
+			produto.setPrecoCompra(campoPrecoCompra.getText());
+		} catch (Exception e) {
+			rotuloPrecoCompra.setTextFill(Paint.valueOf("red"));
+			erro = true;
+		}
+		try {
+			produto.setPrecoVenda(campoPrecoVenda.getText());
+		} catch (Exception e) {
+			rotuloPrecoVenda.setTextFill(Paint.valueOf("red"));
+			erro = true;
+		}
+
+		if (erro) {
+			return;
+		}
+
+		try {
+			ProdutoDAO.salvar(produto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		trocar(false);
+		atualizarGrade(0);
+	}
+
+	@FXML
+	private void cancelar() {
+		trocar(false);
+		atualizarGrade(0);
+	}
+
+	private void atualizarGrade(int pagina) {
+		try {
+			paginacao.setPageCount(
+					(int) Math.ceil(((double) ProdutoDAO.quantidade(filtro.getText())) / QUANTIDADE_PAGINA));
+			tabela.setItems(ProdutoDAO.listar(filtro.getText(), QUANTIDADE_PAGINA, pagina));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 }

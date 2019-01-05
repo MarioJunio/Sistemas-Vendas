@@ -1,106 +1,115 @@
 package com.jdenner.model;
 
-import java.text.NumberFormat;
+import java.math.BigDecimal;
 
 public class Produto {
 
-    private int codigo;
-    private String nome;
-    private double precoCompra;
-    private double precoVenda;
-    private int quantidade;
+	private int codigo;
+	private String nome;
+	private String marca;
+	private float peso;
+	private BigDecimal precoUnitario;
+	private Unidade unidade;
+	private float quantidade;
 
-    public Produto() {
-        this.codigo = 0;
-    }
+	public float getQuantidade() {
+		return quantidade;
+	}
 
-    public int getCodigo() {
-        return codigo;
-    }
+	public void setQuantidade(float quantidade) {
+		this.quantidade = quantidade;
+	}
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
+	private int estoque;
+	private UnidadeCoversao unidadeConversao;
 
-    public String getNome() {
-        return nome;
-    }
+	public Produto() {
+		this.codigo = 0;
+	}
 
-    public void setNome(String nome) throws Exception {
-        if (nome.trim().length() < 3 || nome.trim().length() > 200) {
-            throw new Exception("Nome inválido!");
-        }
-        this.nome = nome;
-    }
+	public UnidadeCoversao getUnidadeConversao() {
+		return unidadeConversao;
+	}
 
-    public double getPrecoCompra() {
-        return precoCompra;
-    }
+	public void setUnidadeConversao(UnidadeCoversao unidadeConversao) {
+		this.unidadeConversao = unidadeConversao;
+	}
 
-    public String getPrecoCompraFormatado() {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMinimumFractionDigits(2);
-        nf.setMaximumFractionDigits(2);
-        return nf.format(precoCompra);
-    }
+	public int getCodigo() {
+		return codigo;
+	}
 
-    public void setPrecoCompra(double precoCompra) throws Exception {
-        if (precoCompra < 0) {
-            throw new Exception("Preço de compra inválido!");
-        }
-        this.precoCompra = precoCompra;
-    }
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
 
-    public void setPrecoCompra(String precoCompra) throws Exception {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        setPrecoCompra(nf.parse(precoCompra).doubleValue());
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public double getPrecoVenda() {
-        return precoVenda;
-    }
+	public void setNome(String nome) throws Exception {
+		if (nome.trim().length() < 3 || nome.trim().length() > 200) {
+			throw new Exception("Nome inválido!");
+		}
+		this.nome = nome;
+	}
 
-    public String getPrecoVendaFormatado() {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMinimumFractionDigits(2);
-        nf.setMaximumFractionDigits(2);
-        
-        return nf.format(precoVenda);
-    }
+	public String getMarca() {
+		return marca;
+	}
 
-    public void setPrecoVenda(double precoVenda) throws Exception {
-        if (precoVenda < 0) {
-            throw new Exception("Preço de venda inválido!");
-        }
-        this.precoVenda = precoVenda;
-    }
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
 
-    public void setPrecoVenda(String precoVenda) throws Exception {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        setPrecoVenda(nf.parse(precoVenda).doubleValue());
-    }
+	public float getPeso() {
+		return peso;
+	}
 
-    public int getQuantidade() {
-        return quantidade;
-    }
+	public void setPeso(float peso) {
+		this.peso = peso;
+	}
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
+	public BigDecimal getPrecoUnitario() {
+		return precoUnitario;
+	}
 
-    @Override
-    public String toString() {
-        return getNome();
-    }
+	public void setPrecoUnitario(BigDecimal precoUnitario) {
+		this.precoUnitario = precoUnitario;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Produto) {
-            Produto p = (Produto) o;
-            if (p.getCodigo() == this.getCodigo()) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public Unidade getUnidade() {
+		return unidade;
+	}
+
+	public void setUnidade(Unidade unidade) {
+		this.unidade = unidade;
+	}
+
+	public int getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(int estoque) {
+		this.estoque = estoque;
+	}
+
+	@Override
+	public String toString() {
+		return "Produto [codigo=" + codigo + ", nome=" + nome + ", marca=" + marca + ", peso=" + peso
+				+ ", precoUnitario=" + precoUnitario + ", unidade=" + unidade + ", quantidade=" + quantidade
+				+ ", estoque=" + estoque + ", unidadeConversao=" + unidadeConversao + "]";
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Produto) {
+			Produto p = (Produto) o;
+			if (p.getCodigo() == this.getCodigo()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

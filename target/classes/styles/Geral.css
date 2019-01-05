@@ -11,9 +11,7 @@
     -fx-background-color: #e3e3e3;
     -fx-cursor: hand;
 }
-.title {
-    -fx-font-size: 20pt;
-}
+
 .botao-localizar {
     -fx-padding: 0;
 }

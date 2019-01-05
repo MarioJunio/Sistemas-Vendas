@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -21,7 +23,7 @@
 
 <StackPane stylesheets="@../styles/Geral.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jdenner.control.ProdutoController">
     <children>
-        <VBox fx:id="consulta">
+        <VBox fx:id="consulta" visible="false">
             <children>
                 <AnchorPane>
                     <children>
@@ -78,23 +80,89 @@
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
         </VBox>
-        <VBox fx:id="formulario" fillWidth="false" spacing="5.0" visible="false">
+        <VBox fx:id="formulario" fillWidth="false" spacing="5.0">
             <children>
-                <Label styleClass="title" text="Formulário de produtos" />
+                <Label alignment="CENTER" prefHeight="31.0" prefWidth="544.0" styleClass="title" text="Cadastro de Produto" textAlignment="CENTER" textFill="#5b5b5b" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="19.0" />
+               </font></Label>
+            <Line endX="450.0" startX="-100.0" stroke="#5b5b5b" strokeWidth="2.0" />
                 <Label fx:id="rotuloNome" styleClass="rotulo" text="Nome" />
                 <TextField fx:id="campoNome" prefWidth="350.0" />
-                <Label fx:id="rotuloPrecoCompra" styleClass="rotulo" text="Preço de compra" />
-                <TextField fx:id="campoPrecoCompra" prefWidth="150.0" />
-                <Label fx:id="rotuloPrecoVenda" styleClass="rotulo" text="Preço de venda" />
-                <TextField fx:id="campoPrecoVenda" prefWidth="150.0" />
-                <HBox spacing="5.0">
+            <Label fx:id="rotuloMarca" styleClass="rotulo" text="Marca" />
+            <TextField fx:id="campoMarca" prefWidth="350.0" />
+            <Label fx:id="rotuloPeso" styleClass="rotulo" text="Peso" />
+            <TextField fx:id="campoPeso" prefWidth="150.0" />
+            <Label fx:id="rotuloUnidade" styleClass="rotulo" text="Unidade" />
+            <ComboBox fx:id="comboUnidade" prefHeight="27.0" prefWidth="150.0" />
+            <Label fx:id="rotuloQuantidade" text="Quantidade" />
+            <HBox prefHeight="30.0" prefWidth="254.0">
+               <children>
+                  <TextField fx:id="campoQuantidade" prefWidth="100.0" />
+                  <Label fx:id="rotuloUnidadeQuantidade" prefHeight="26.0" prefWidth="129.0" text="Unidade">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+                <Label fx:id="rotuloPrecoUnitario" styleClass="rotulo" text="Preço unitário" />
+                <TextField fx:id="campoPrecoUnitario" prefWidth="150.0" />
+            <Label fx:id="rotuloEstoque" text="Estoque" />
+            <TextField fx:id="campoEstoque" prefWidth="150.0" />
+            <CheckBox fx:id="checkUsarUnidadeConversao" mnemonicParsing="false" prefHeight="18.0" prefWidth="235.0" text="Usar unidade de conversão?" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <HBox fx:id="boxUnidadeConversao" prefHeight="53.0" prefWidth="529.0">
+               <children>
+                  <VBox prefHeight="100.0" prefWidth="194.0">
+                     <children>
+                        <Label fx:id="rotuloUnidadeConversao1" text="Unidade conversão" />
+                        <ComboBox fx:id="comboUnidadeConversao1" prefWidth="150.0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                     </children>
+                  </VBox>
+                  <Text fill="#9a9a9a" strokeType="OUTSIDE" strokeWidth="0.0" text="=" wrappingWidth="20.75">
+                     <HBox.margin>
+                        <Insets right="40.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Arial Black" size="32.0" />
+                     </font>
+                  </Text>
+                  <VBox prefHeight="100.0" prefWidth="230.0">
+                     <children>
+                        <Label fx:id="rotuloUnidadeEquivalente1" text="Unidade equivalente" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                           <children>
+                              <TextField fx:id="campoQuantidadeUnidadeEquivalente1" prefHeight="27.0" prefWidth="60.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <ComboBox fx:id="comboUnidadeEquivalente1" prefWidth="150.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+                <HBox prefHeight="30.0" prefWidth="163.0" spacing="5.0">
                     <children>
                         <Button fx:id="botaoSalvar" defaultButton="true" mnemonicParsing="false" onAction="#salvar" prefHeight="28.0" prefWidth="130.0" text="Salvar" />
                         <Button fx:id="botaoCancelar" cancelButton="true" mnemonicParsing="false" onAction="#cancelar" prefHeight="28.0" prefWidth="28.0" text="✕" />
                     </children>
-                    <padding>
-                        <Insets top="20.0" />
-                    </padding>
                 </HBox>
             </children>
             <padding>
