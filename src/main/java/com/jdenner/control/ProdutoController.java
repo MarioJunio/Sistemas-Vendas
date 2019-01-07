@@ -1,11 +1,15 @@
 package com.jdenner.control;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.jdenner.dao.ProdutoDAO;
 import com.jdenner.model.Produto;
 import com.jdenner.model.Unidade;
+import com.jdenner.util.Colors;
 import com.jdenner.view.component.BotaoEditar;
 import com.jdenner.view.component.BotaoExcluir;
 
@@ -23,14 +27,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 public class ProdutoController implements Initializable, Controller {
 
 	private final int QUANTIDADE_PAGINA = 9;
-
-	private Produto produto;
 
 	@FXML
 	private Parent consulta;
@@ -111,7 +112,7 @@ public class ProdutoController implements Initializable, Controller {
 	private Label rotuloUnidadeConversao1;
 
 	@FXML
-	private ComboBox comboUnidadeConversao1;
+	private ComboBox<Unidade> comboUnidadeConversao1;
 
 	@FXML
 	private Label rotuloUnidadeEquivalente1;
@@ -120,7 +121,7 @@ public class ProdutoController implements Initializable, Controller {
 	private TextField campoQuantidadeUnidadeEquivalente1;
 
 	@FXML
-	private ComboBox comboUnidadeEquivalente1;
+	private ComboBox<Unidade> comboUnidadeEquivalente1;
 
 	@FXML
 	private Button botaoSalvar;
@@ -156,7 +157,6 @@ public class ProdutoController implements Initializable, Controller {
 
 	@FXML
 	private void novo() {
-		this.produto = new Produto();
 
 		campoNome.clear();
 		campoNome.clear();
@@ -208,43 +208,45 @@ public class ProdutoController implements Initializable, Controller {
 
 	@FXML
 	private void salvar() {
-		rotuloNome.setTextFill(Paint.valueOf("#333333"));
-		rotuloPrecoCompra.setTextFill(Paint.valueOf("#333333"));
-		rotuloPrecoVenda.setTextFill(Paint.valueOf("#333333"));
 
-		boolean erro = false;
+		// remove warning do formulario
+		clearCadastroProdutoWarnings();
 
-		try {
-			produto.setNome(campoNome.getText().trim());
-		} catch (Exception e) {
-			rotuloNome.setTextFill(Paint.valueOf("red"));
-			erro = true;
+		// valida o formulario do cadastro de produto
+		boolean erro = validarCadastroProduto();
+
+		if (!erro) {
+
+			try {
+				ProdutoDAO.salvar(getProduto());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			trocar(false);
+			atualizarGrade(0);
 		}
-		try {
-			produto.setPrecoCompra(campoPrecoCompra.getText());
-		} catch (Exception e) {
-			rotuloPrecoCompra.setTextFill(Paint.valueOf("red"));
-			erro = true;
-		}
-		try {
-			produto.setPrecoVenda(campoPrecoVenda.getText());
-		} catch (Exception e) {
-			rotuloPrecoVenda.setTextFill(Paint.valueOf("red"));
-			erro = true;
+	}
+
+	private Produto getProduto() throws Exception {
+		Produto produto = new Produto();
+
+		produto.setNome(campoNome.getText().trim());
+		produto.setMarca(campoMarca.getText().trim());
+		produto.setPeso(Float.parseFloat(campoPeso.getText().trim()));
+		produto.setUnidade(comboUnidade.getValue());
+		produto.setQuantidade(Float.parseFloat(campoQuantidade.getText()));
+		produto.setPrecoUnitario(new BigDecimal(campoPrecoUnitario.getText().replaceAll("[,\\.]+", "")));
+		produto.setEstoque(Integer.parseInt(campoEstoque.getText()));
+
+		if (checkUsarUnidadeConversao.isSelected()) {
+			produto.getUnidadeConversao().setUnidadeConversao(comboUnidadeConversao1.getValue());
+			produto.getUnidadeConversao()
+					.setQuantidadeUnidadeConversao(Float.parseFloat(campoQuantidadeUnidadeEquivalente1.getText()));
+
 		}
 
-		if (erro) {
-			return;
-		}
-
-		try {
-			ProdutoDAO.salvar(produto);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		trocar(false);
-		atualizarGrade(0);
+		return produto;
 	}
 
 	@FXML
@@ -261,5 +263,75 @@ public class ProdutoController implements Initializable, Controller {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void clearCadastroProdutoWarnings() {
+
+		rotuloNome.setTextFill(Colors.GRAY_20);
+		rotuloMarca.setTextFill(Colors.GRAY_20);
+		rotuloPeso.setTextFill(Colors.GRAY_20);
+		rotuloUnidade.setTextFill(Colors.GRAY_20);
+		rotuloQuantidade.setTextFill(Colors.GRAY_20);
+		rotuloPrecoUnitario.setTextFill(Colors.GRAY_20);
+		rotuloEstoque.setTextFill(Colors.GRAY_20);
+		rotuloUnidadeConversao1.setTextFill(Colors.GRAY_20);
+		rotuloUnidadeEquivalente1.setTextFill(Colors.GRAY_20);
+	}
+
+	private boolean validarCadastroProduto() {
+
+		boolean erro = false;
+
+		if (StringUtils.isEmpty(campoNome.getText())) {
+			rotuloNome.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (StringUtils.isEmpty(campoMarca.getText())) {
+			rotuloMarca.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (StringUtils.isEmpty(campoPeso.getText())) {
+			rotuloPeso.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (comboUnidade.getSelectionModel().getSelectedItem() == null) {
+			rotuloUnidade.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (StringUtils.isEmpty(campoQuantidade.getText())) {
+			rotuloQuantidade.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (StringUtils.isEmpty(campoPrecoUnitario.getText())) {
+			rotuloPrecoUnitario.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (StringUtils.isEmpty(campoEstoque.getText())) {
+			rotuloEstoque.setTextFill(Colors.RED);
+			erro = true;
+		}
+
+		if (checkUsarUnidadeConversao.isSelected()) {
+
+			if (comboUnidadeConversao1.getSelectionModel().getSelectedItem() == null) {
+				rotuloUnidadeConversao1.setTextFill(Colors.RED);
+				erro = true;
+			}
+
+			if (StringUtils.isEmpty(campoQuantidadeUnidadeEquivalente1.getText())
+					|| (comboUnidadeEquivalente1.getSelectionModel().getSelectedItem()) == null) {
+				rotuloUnidadeEquivalente1.setTextFill(Colors.RED);
+				erro = true;
+			}
+
+		}
+
+		return erro;
 	}
 }

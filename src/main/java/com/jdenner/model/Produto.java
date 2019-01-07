@@ -11,7 +11,9 @@ public class Produto {
 	private BigDecimal precoUnitario;
 	private Unidade unidade;
 	private float quantidade;
-
+	private int estoque;
+	private UnidadeCoversao unidadeConversao = new UnidadeCoversao();
+	
 	public float getQuantidade() {
 		return quantidade;
 	}
@@ -19,9 +21,6 @@ public class Produto {
 	public void setQuantidade(float quantidade) {
 		this.quantidade = quantidade;
 	}
-
-	private int estoque;
-	private UnidadeCoversao unidadeConversao;
 
 	public Produto() {
 		this.codigo = 0;
