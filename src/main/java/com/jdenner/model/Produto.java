@@ -2,9 +2,8 @@ package com.jdenner.model;
 
 import java.math.BigDecimal;
 
-public class Produto {
+public class Produto extends Entity {
 
-	private int codigo;
 	private String nome;
 	private String marca;
 	private float peso;
@@ -13,17 +12,13 @@ public class Produto {
 	private float quantidade;
 	private int estoque;
 	private UnidadeCoversao unidadeConversao = new UnidadeCoversao();
-	
+
 	public float getQuantidade() {
 		return quantidade;
 	}
 
 	public void setQuantidade(float quantidade) {
 		this.quantidade = quantidade;
-	}
-
-	public Produto() {
-		this.codigo = 0;
 	}
 
 	public UnidadeCoversao getUnidadeConversao() {
@@ -34,21 +29,13 @@ public class Produto {
 		this.unidadeConversao = unidadeConversao;
 	}
 
-	public int getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
-
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) throws Exception {
 		if (nome.trim().length() < 3 || nome.trim().length() > 200) {
-			throw new Exception("Nome inv√°lido!");
+			throw new Exception("Nome inv·lido!");
 		}
 		this.nome = nome;
 	}
@@ -95,20 +82,9 @@ public class Produto {
 
 	@Override
 	public String toString() {
-		return "Produto [codigo=" + codigo + ", nome=" + nome + ", marca=" + marca + ", peso=" + peso
-				+ ", precoUnitario=" + precoUnitario + ", unidade=" + unidade + ", quantidade=" + quantidade
-				+ ", estoque=" + estoque + ", unidadeConversao=" + unidadeConversao + "]";
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Produto) {
-			Produto p = (Produto) o;
-			if (p.getCodigo() == this.getCodigo()) {
-				return true;
-			}
-		}
-		return false;
+		return "Produto [nome=" + nome + ", marca=" + marca + ", peso=" + peso + ", precoUnitario=" + precoUnitario
+				+ ", unidade=" + unidade + ", quantidade=" + quantidade + ", estoque=" + estoque + ", unidadeConversao="
+				+ unidadeConversao + "]";
 	}
 
 }

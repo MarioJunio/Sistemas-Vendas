@@ -2,24 +2,11 @@ package com.jdenner.model;
 
 import java.util.Date;
 
-public class Cliente {
+public class Cliente extends Entity {
 
-	private int codigo;
 	private String nome;
 	private String cpf;
 	private Date dataNascimento;
-
-	public Cliente() {
-		this.codigo = 0;
-	}
-
-	public int getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
 
 	public String getNome() {
 		return nome;
@@ -47,17 +34,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return getNome();
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", dataNascimento=" + dataNascimento + "]";
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Cliente) {
-			Cliente c = (Cliente) o;
-			if (c.getCodigo() == this.getCodigo()) {
-				return true;
-			}
-		}
-		return false;
-	}
 }
